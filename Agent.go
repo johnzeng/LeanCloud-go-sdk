@@ -2,6 +2,7 @@ package lean
 
 import (
 	"crypto/md5"
+	"errors"
 	"fmt"
 	"github.com/parnurzeal/gorequest"
 	"time"
@@ -41,7 +42,10 @@ func (this *Agent) Do() error {
 	}
 	resp, body, err := this.superAgent.End()
 	println(body)
-	println(resp)
+
+	if resp.StatusCode >= 400 {
+		return errors.New(body)
+	}
 	if len(err) != 0 {
 		for i := range err {
 			println(err[i].Error())

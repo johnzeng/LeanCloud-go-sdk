@@ -1,6 +1,7 @@
 package lean
 
 import (
+	"os"
 	"testing"
 )
 
@@ -15,7 +16,9 @@ func (this Test) GetClassName() string {
 }
 
 func TestCreateObject(t *testing.T) {
-	client := NewClient("L1rboIrylg7wJklCPV8v6TCO-gzGzoHsz", "", "")
+	client := NewClient(os.Getenv("LEAN_APPID"),
+		os.Getenv("LEAN_APPKEY"),
+		os.Getenv("LEAN_MASTERKEY"))
 	err := client.Create(
 		Test{
 			Hello:     "this is first message",
@@ -28,6 +31,8 @@ func TestCreateObject(t *testing.T) {
 }
 
 func TestGetObjectById(t *testing.T) {
-	client := NewClient("L1rboIrylg7wJklCPV8v6TCO-gzGzoHsz", "", "")
+	client := NewClient(os.Getenv("LEAN_APPID"),
+		os.Getenv("LEAN_APPKEY"),
+		os.Getenv("LEAN_MASTERKEY"))
 	client.GetObjectById("test", "57e4fd355bbb50005d499f3e").Do()
 }
