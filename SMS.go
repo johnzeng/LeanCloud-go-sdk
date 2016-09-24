@@ -17,10 +17,10 @@ const (
 //set SmsType to VoiceSMS if you wanna send a voice sms
 type RequestMobilePhoneVerify struct {
 	Number  string `json:"mobilePhoneNumber"`
-	TTL     int    `json:"ttl"`
-	AppName string `json:"name"`
-	Op      string `json:"op"`
-	SmsType string `json:"smsType"`
+	TTL     int    `json:"ttl,omitempty"`
+	AppName string `json:"name,omitempty"`
+	Op      string `json:"op,omitempty"`
+	SmsType string `json:"smsType,omitempty"`
 }
 
 //request a mobile phone verify
@@ -28,7 +28,7 @@ func (client leanClient) RequestMobilVerify(
 	verifyRequest RequestMobilePhoneVerify) error {
 
 	request := gorequest.New()
-	url := UrlBase + "/requestMobilePhoneVerify"
+	url := UrlBase + "/requestSmsCode"
 	superAgent := request.Post(url).
 		Set("X-LC-Id", client.appId).
 		Send(verifyRequest)
