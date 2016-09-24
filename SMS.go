@@ -37,7 +37,7 @@ func (client leanClient) RequestMobilVerify(
 		client:     client,
 	}
 
-	err := agent.UseSignature().Do()
+	err := agent.Do()
 	if nil != err {
 		return err
 	} else {
