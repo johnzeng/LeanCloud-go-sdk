@@ -1,0 +1,20 @@
+{
+	"ImportPath": "github.com/johnzeng/leancloud-go-sdk",
+	"GoVersion": "go1.7",
+	"GodepVersion": "v74",
+	"Deps": [
+		{
+			"ImportPath": "github.com/moul/http2curl",
+			"Rev": "b1479103caacaa39319f75e7f57fc545287fca0d"
+		},
+		{
+			"ImportPath": "github.com/parnurzeal/gorequest",
+			"Comment": "v0.2.14-11-g29ced6f",
+			"Rev": "29ced6f360a5ac3823a3675b4e29fbab336cc186"
+		},
+		{
+			"ImportPath": "golang.org/x/net/publicsuffix",
+			"Rev": "1358eff22f0dd0c54fc521042cc607f6ff4b531a"
+		}
+	]
+}
