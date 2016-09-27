@@ -9,6 +9,7 @@ import (
 type Test struct {
 	LeanClassesBase
 	Hello     string   `json:"hi"`
+	TestBytes LeanByte `json:"bytess"`
 	TestDate  LeanTime `json:"tester"`
 	notUpload string   `json:"notUpload"`
 	Ignore    string   `json:"-"`
@@ -60,6 +61,6 @@ func TestGetObjectById(t *testing.T) {
 		if ret.Hello != "this is first message" {
 			t.Error("message is wrong")
 		}
-		println(ret.UpdatedAt.GetTime().String())
+		println(ret.UpdatedAt.String())
 	}
 }
