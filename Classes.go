@@ -31,3 +31,26 @@ func (client leanClient) GetObjectById(class, objectId string) *Agent {
 		client:     client,
 	}
 }
+
+func (client leanClient) DeleteObjectById(class, objectId string) *Agent {
+	request := gorequest.New()
+	classesUrl := ClasssesUrlBase + "/" + class + "/" + objectId
+	superAgent := request.Delete(classesUrl).
+		Set("X-LC-Id", client.appId)
+	return &Agent{
+		superAgent: superAgent,
+		client:     client,
+	}
+}
+
+func (client leanClient) UpdateObjectById(id string, obj LeanClasses) *Agent {
+	request := gorequest.New()
+	classesUrl := ClasssesUrlBase + "/" + obj.GetClassName() + "/" + id
+	superAgent := request.Put(classesUrl).
+		Set("X-LC-Id", client.appId).
+		Send(obj)
+	return &Agent{
+		superAgent: superAgent,
+		client:     client,
+	}
+}

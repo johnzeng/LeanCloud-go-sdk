@@ -2,6 +2,7 @@ package lean
 
 import (
 	"crypto/md5"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/parnurzeal/gorequest"
@@ -11,9 +12,18 @@ import (
 type Agent struct {
 	client       leanClient
 	superAgent   *gorequest.SuperAgent
+	body         string
 	useSignature bool
 	useMasterKey bool
 	ts           int64
+}
+
+func (this *Agent) ScanResponse(ret interface{}) error {
+	if err := json.Unmarshal([]byte(this.body), ret); nil != err {
+		println(this.body)
+		return err
+	}
+	return nil
 }
 
 //if you wanna use signature instead of key directlly , use this
@@ -41,7 +51,7 @@ func (this *Agent) Do() error {
 			Set("X-LC-Key", this.client.appKey)
 	}
 	resp, body, err := this.superAgent.End()
-	println(body)
+	this.body = body
 
 	if resp.StatusCode >= 400 {
 		return errors.New(body)
