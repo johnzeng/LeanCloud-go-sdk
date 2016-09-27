@@ -56,15 +56,20 @@ func (t *LeanTime) fillByMap(m map[string]string) error {
 func (t *LeanTime) UnmarshalJSON(i []byte) error {
 	//do your serializing here
 	var timeStr string
-	if err := json.Unmarshal(i, &timeStr); err == nil {
-		if t, err := str2Date(timeStr); err != nil {
-			if converErr := str2AvObject(timeStr, t); nil != converErr {
-				return converErr
-			}
+	if err := json.Unmarshal(i, &timeStr); err != nil {
+		if converErr := str2AvObject(i, t); nil != converErr {
+			println("also can not convert :" + timeStr)
+			return converErr
+		} else {
+			return nil
+		}
+		return err
+	} else {
+		if ret, err := str2Date(timeStr); err != nil {
+		} else {
+			t = ret
 		}
 		return nil
-	} else {
-		return err
 	}
 }
 
@@ -81,12 +86,14 @@ type AVObject interface {
 	fillByMap(map[string]string) error
 }
 
-func str2AvObject(str string, obj AVObject) error {
+func str2AvObject(str []byte, obj AVObject) error {
 	object := map[string]string{}
 	if err := json.Unmarshal([]byte(str), &object); nil != err {
+		println("to map error")
 		return err
 	} else {
 		if object["__type"] != obj.typeName() {
+			println("type error")
 			return errors.New("type wrong!")
 		}
 		if err := obj.fillByMap(object); nil != err {
