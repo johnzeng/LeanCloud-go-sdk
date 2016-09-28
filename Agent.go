@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/johnzeng/leancloud-go-sdk/query"
 	"github.com/parnurzeal/gorequest"
 	"time"
 )
@@ -16,6 +17,18 @@ type Agent struct {
 	useSignature bool
 	useMasterKey bool
 	ts           int64
+}
+
+type QueryAgent struct {
+	Agent
+	query       *query.Query
+	limit, skip int
+	order       string
+}
+
+type UpdateAgent struct {
+	Agent
+	query *query.Query
 }
 
 func (this *Agent) ScanResponse(ret interface{}) error {
