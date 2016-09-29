@@ -1,11 +1,25 @@
 package update
 
+import (
+	"encoding/json"
+)
+
 type Update struct {
 	update map[string]interface{}
 }
 
+func (this *Update) String() string {
+	if str, err := json.Marshal(this.update); nil != err {
+		return ""
+	} else {
+		return string(str)
+	}
+}
+
 func (this *Update) And(u *Update) *Update {
-	this.update = append(this.update, u.update)
+	for key, value := range u.update {
+		this.update[key] = value
+	}
 	return this
 }
 
