@@ -21,14 +21,45 @@ type Agent struct {
 
 type QueryAgent struct {
 	Agent
-	query       *query.Query
-	limit, skip int
-	order       string
 }
 
 type UpdateAgent struct {
-	Agent
-	query *query.Query
+	QueryAgent
+}
+
+func (this *QueryAgent) WithKeys(key string) *QueryAgent {
+	this.superAgent.QueryData.Add("keys", key)
+	return this
+}
+
+func (this *QueryAgent) WithCount() *QueryAgent {
+	this.superAgent.QueryData.Add("count", "1")
+	return this
+}
+
+func (this *QueryAgent) WithQuery(q *query.Query) *QueryAgent {
+	this.superAgent.QueryData.Add("where", q.String())
+	return this
+}
+
+func (this *QueryAgent) WithCql(cql string) *QueryAgent {
+	this.superAgent.QueryData.Add("cql", cql)
+	return this
+}
+
+func (this *QueryAgent) Limit(l int) *QueryAgent {
+	this.superAgent.QueryData.Add("limit", fmt.Sprintf("%d", l))
+	return this
+}
+
+func (this *QueryAgent) Skip(s int) *QueryAgent {
+	this.superAgent.QueryData.Add("skip", fmt.Sprintf("%d", s))
+	return this
+}
+
+func (this *QueryAgent) Order(s string) *QueryAgent {
+	this.superAgent.QueryData.Add("order", fmt.Sprintf("%d", s))
+	return this
 }
 
 func (this *Agent) ScanResponse(ret interface{}) error {
