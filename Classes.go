@@ -43,17 +43,16 @@ func (client leanClient) DeleteObjectById(class, objectId string) *Agent {
 	}
 }
 
-func (client leanClient) UpdateObjectById(id string, obj LeanClasses) *UpdateAgent {
+func (client leanClient) UpdateObjectById(id string, obj LeanClasses) *Agent {
 	request := gorequest.New()
 	classesUrl := ClasssesUrlBase + "/" + obj.GetClassName() + "/" + id
 	superAgent := request.Put(classesUrl).
 		Set("X-LC-Id", client.appId).
 		Send(obj)
-	agent := Agent{
+	return &Agent{
 		superAgent: superAgent,
 		client:     client,
 	}
-	return &UpdateAgent{QueryAgent{agent}}
 
 }
 
