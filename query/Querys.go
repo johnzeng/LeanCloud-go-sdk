@@ -46,7 +46,7 @@ func compare(key, cmp string, value interface{}) *Query {
 }
 
 func Eq(key string, value interface{}) *Query {
-	return compare(key, "$eq", value)
+	return &Query{map[string]interface{}{key: value}}
 }
 
 func Lt(key string, value interface{}) *Query {

@@ -1,6 +1,7 @@
 package lean
 
 import (
+	"github.com/johnzeng/leancloud-go-sdk/query"
 	"os"
 	"testing"
 	"time"
@@ -63,4 +64,16 @@ func TestGetObjectById(t *testing.T) {
 		}
 		println(ret.UpdatedAt.String())
 	}
+}
+
+func TestClassQuery(t *testing.T) {
+	client := NewClient(os.Getenv("LEAN_APPID"),
+		os.Getenv("LEAN_APPKEY"),
+		os.Getenv("LEAN_MASTERKEY"))
+	agent := client.Query("test")
+	q := query.Lt("tester", LeanTime{time.Now()})
+	agent.WithQuery(q).Limit(1)
+	agent.Do()
+	println(agent.body)
+
 }
