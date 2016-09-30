@@ -86,13 +86,13 @@ func TestClassUpdate(t *testing.T) {
 		os.Getenv("LEAN_MASTERKEY"))
 
 	test := Test{
-		Array: make([]string, 1),
+		Array:    make([]string, 1),
+		TestDate: NewLeanTime(time.Now()),
 	}
 	test.Array[0] = "hello"
 	agent := client.Collection("test").UpdateObjectById(id, test)
 	if err := agent.Do(); nil != err {
 		t.Error(err.Error())
-		t.Log(agent.superAgent.Data)
 		return
 	}
 
