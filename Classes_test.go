@@ -2,6 +2,7 @@ package lean
 
 import (
 	"github.com/johnzeng/leancloud-go-sdk/query"
+	"github.com/johnzeng/leancloud-go-sdk/update"
 	"os"
 	"testing"
 	"time"
@@ -14,6 +15,7 @@ type Test struct {
 	TestDate  LeanTime `json:"tester"`
 	notUpload string   `json:"notUpload"`
 	Ignore    string   `json:"-"`
+	Array     []string `json:"ss,omitempty"`
 }
 
 var id string
@@ -58,7 +60,6 @@ func TestGetObjectById(t *testing.T) {
 		if ret.Hello != "this is first message" {
 			t.Error("message is wrong")
 		}
-		println(ret.UpdatedAt.String())
 	}
 }
 
@@ -67,9 +68,52 @@ func TestClassQuery(t *testing.T) {
 		os.Getenv("LEAN_APPKEY"),
 		os.Getenv("LEAN_MASTERKEY"))
 	agent := client.Collection("test").Query()
-	q := query.Lt("tester", LeanTime{time.Now()})
+	q := query.Eq("hi", "this is first message")
 	agent.WithQuery(q).Limit(1)
 	agent.Do()
-	println(agent.body)
+	ret := TestResp{}
+	agent.ScanResponse(&ret)
+	if ret.Results[0].Hello != "this is first message" {
+		t.Errorf("message is wrong:%v", ret)
+		t.Log(agent.body)
+	}
 
+}
+
+func TestClassUpdate(t *testing.T) {
+	client := NewClient(os.Getenv("LEAN_APPID"),
+		os.Getenv("LEAN_APPKEY"),
+		os.Getenv("LEAN_MASTERKEY"))
+
+	test := Test{
+		Array: make([]string, 1),
+	}
+	test.Array[0] = "hello"
+	agent := client.Collection("test").UpdateObjectById(id, test)
+	if err := agent.Do(); nil != err {
+		t.Error(err.Error())
+		t.Log(agent.superAgent.Data)
+		return
+	}
+
+}
+
+func TestClassUpdateByPart(t *testing.T) {
+	client := NewClient(os.Getenv("LEAN_APPID"),
+		os.Getenv("LEAN_APPKEY"),
+		os.Getenv("LEAN_MASTERKEY"))
+
+	test := Test{
+		Array: make([]string, 1),
+	}
+
+	updateObj := update.AddToArray("ss", "123", "456")
+
+	test.Array[0] = "hello"
+	agent := client.Collection("test").UpdateObjectById(id, updateObj)
+	agent.UseMasterKey()
+	if err := agent.Do(); nil != err {
+		t.Error(err.Error())
+		t.Log(agent.superAgent.Data)
+	}
 }

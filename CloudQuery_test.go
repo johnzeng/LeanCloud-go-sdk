@@ -7,7 +7,7 @@ import (
 
 //any better way?
 type TestResp struct {
-	Results []Test `json:"results,omitepty"`
+	Results []Test `json:"results,omitempty"`
 	Count   int64  `json:"count,omitempty"`
 }
 

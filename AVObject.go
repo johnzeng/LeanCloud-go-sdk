@@ -87,7 +87,7 @@ func (t LeanByte) MarshalJSON() ([]byte, error) {
 //2015-07-14T02:31:50.100Z
 //convet TimeStamp into json, we take only the unix timestamp seconds
 func (t LeanTime) MarshalJSON() ([]byte, error) {
-	stamp := t.UTC().Format("2006-01-02T15:04:05.999Z")
+	stamp := t.UTC().Format("2006-01-02T15:04:05.000Z")
 	str := fmt.Sprintf(`{
 		"__type": "Date",
 		"iso": "%s"

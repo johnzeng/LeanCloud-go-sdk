@@ -17,6 +17,7 @@ go install
 - Object delete by id
 - Object update by id
 - Object query support
+- cql query support
 - requestSmsCode, verifySmsCode（需要在控制台设置开放这两个接口）
 - push notification(待测试)
 - 支持LeanCloud的Date，Byte格式。
@@ -27,12 +28,9 @@ go install
 # Todo:
 以下事项将会按照顺序进行：
 
-- cql query support
 - 实时通信API
 - User,Installation, role等系统结构体的集成
 - Pointer，File以及Relation数据结构支持。
 - 事件流API
 - 数据Schema
 - 统计数据API
-
-

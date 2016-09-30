@@ -2,10 +2,28 @@ package update
 
 import (
 	"encoding/json"
+	"errors"
 )
 
 type Update struct {
 	update map[string]interface{}
+}
+
+func (t Update) MarshalJSON() ([]byte, error) {
+	str := t.String()
+	if "" == str {
+		return nil, errors.New("can not marshal json")
+	}
+	return []byte(str), nil
+}
+
+func (t *Update) UnmarshalJSON(i []byte) error {
+	//do your serializing here
+	if err := json.Unmarshal(i, &t.update); err != nil {
+		return err
+	} else {
+		return nil
+	}
 }
 
 func (this *Update) String() string {
