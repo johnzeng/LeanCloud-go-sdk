@@ -12,6 +12,7 @@ go install
 ```
 
 # 目前支持的功能：
+
 - Object create
 - Object get by id
 - Object delete by id
@@ -27,13 +28,11 @@ go install
 
 
 # Todo:
-以下事项将会按照顺序进行：
 
-- 实时通信API
-- User,Installation, role等系统结构体的集成
+- Cloud function 支持
 - File以及Relation数据结构支持。
 - 事件流API
+- 实时通信API
+- User,Installation, role等系统结构体的集成
 - 数据Schema
 - 统计数据API
-
-

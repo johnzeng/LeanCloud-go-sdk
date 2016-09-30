@@ -30,8 +30,10 @@ type LeanPointer struct {
 	objectId string
 }
 
-//???
+//relation can only modify by AddRelation or RemoveRelation.
+//and the api return only this struct
 type LeanRelation struct {
+	ClassName string `json:'className'`
 }
 
 func (t *LeanPointer) typeName() string {
