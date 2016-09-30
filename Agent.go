@@ -84,14 +84,15 @@ func (this *Agent) UseMasterKey() *Agent {
 }
 
 func (this *Agent) Do() error {
+	this.superAgent.Set("X-LC-Id", this.client.appId)
 	if this.useSignature {
-		this.superAgent = this.superAgent.
+		this.superAgent.
 			Set("X-LC-Sign", this.getSignature())
 	} else if this.useMasterKey {
-		this.superAgent = this.superAgent.
+		this.superAgent.
 			Set("X-LC-Key", this.client.masterKey+",master")
 	} else {
-		this.superAgent = this.superAgent.
+		this.superAgent.
 			Set("X-LC-Key", this.client.appKey)
 	}
 	resp, body, err := this.superAgent.End()

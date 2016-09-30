@@ -4,69 +4,76 @@ import (
 	"github.com/parnurzeal/gorequest"
 )
 
-//create an object
-func (client leanClient) Create(class string, obj interface{}) *Agent {
-	request := gorequest.New()
-	classesUrl := ClasssesUrlBase + "/" + obj.GetClassName()
-	superAgent := request.Post(classesUrl).
-		Set("X-LC-Id", client.appId).
-		Send(obj)
-	return &Agent{
-		superAgent: superAgent,
-		client:     client,
+type Collection struct {
+	client leanClient
+	class  string
+}
+
+func (this leanClient) Collection(collection string) Collection {
+	return Collection{
+		client: this,
+		class:  collection,
 	}
 }
 
-func (client leanClient) GetObjectById(class, objectId string) *Agent {
+//create an object
+func (this Collection) Create(obj interface{}) *Agent {
 	request := gorequest.New()
-	classesUrl := ClasssesUrlBase + "/" + class + "/" + objectId
-	superAgent := request.Get(classesUrl).
-		Set("X-LC-Id", client.appId)
+	classesUrl := ClasssesUrlBase + "/" + this.class
+	superAgent := request.Post(classesUrl).
+		Send(obj)
 	return &Agent{
 		superAgent: superAgent,
-		client:     client,
+		client:     this.client,
+	}
+}
+
+func (this Collection) GetObjectById(objectId string) *Agent {
+	request := gorequest.New()
+	classesUrl := ClasssesUrlBase + "/" + this.class + "/" + objectId
+	superAgent := request.Get(classesUrl)
+	return &Agent{
+		superAgent: superAgent,
+		client:     this.client,
 	}
 }
 
 //you can also specialfy the query parameter, if you don't provide the id, you will delete the objects by query
-func (client leanClient) DeleteObjectById(class, objectId string) *QueryAgent {
+func (this Collection) DeleteObjectById(objectId string) *QueryAgent {
 	request := gorequest.New()
-	classesUrl := ClasssesUrlBase + "/" + class
+	classesUrl := ClasssesUrlBase + "/" + this.class
 	if "" != objectId {
 		classesUrl = classesUrl + "/" + objectId
 	}
-	superAgent := request.Delete(classesUrl).
-		Set("X-LC-Id", client.appId)
-	return &Agent{
+	superAgent := request.Delete(classesUrl)
+	return &QueryAgent{Agent{
 		superAgent: superAgent,
-		client:     client,
-	}
+		client:     this.client,
+	}}
 }
 
 //you can also specialfy the query parameter, if you don't provide the id, you will update the object by query
-func (client leanClient) UpdateObjectById(class, id string, obj interface{}) *UpdateAgent {
+func (this Collection) UpdateObjectById(objectId string, obj interface{}) *UpdateAgent {
 	request := gorequest.New()
-	classesUrl := ClasssesUrlBase + "/" + obj.GetClassName()
+	classesUrl := ClasssesUrlBase + "/" + this.class
 	if "" != objectId {
 		classesUrl = classesUrl + "/" + objectId
 	}
 	superAgent := request.Put(classesUrl).
-		Set("X-LC-Id", client.appId).
 		Send(obj)
-	return &Agent{
+	return &UpdateAgent{QueryAgent{Agent{
 		superAgent: superAgent,
-		client:     client,
-	}
+		client:     this.client,
+	}}}
 }
 
-func (client leanClient) Query(class string) *QueryAgent {
+func (this Collection) Query() *QueryAgent {
 	request := gorequest.New()
-	classesUrl := ClasssesUrlBase + "/" + class
-	superAgent := request.Get(classesUrl).
-		Set("X-LC-Id", client.appId)
+	classesUrl := ClasssesUrlBase + "/" + this.class
+	superAgent := request.Get(classesUrl)
 	agent := Agent{
 		superAgent: superAgent,
-		client:     client,
+		client:     this.client,
 	}
 	return &QueryAgent{agent}
 }

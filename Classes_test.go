@@ -16,17 +16,13 @@ type Test struct {
 	Ignore    string   `json:"-"`
 }
 
-func (this Test) GetClassName() string {
-	return "test"
-}
-
 var id string
 
 func TestCreateObject(t *testing.T) {
 	client := NewClient(os.Getenv("LEAN_APPID"),
 		os.Getenv("LEAN_APPKEY"),
 		os.Getenv("LEAN_MASTERKEY"))
-	agent := client.Create(
+	agent := client.Collection("test").Create(
 		Test{
 			Hello:     "this is first message",
 			notUpload: "nono",
@@ -50,7 +46,7 @@ func TestGetObjectById(t *testing.T) {
 	client := NewClient(os.Getenv("LEAN_APPID"),
 		os.Getenv("LEAN_APPKEY"),
 		os.Getenv("LEAN_MASTERKEY"))
-	agent := client.GetObjectById("test", id)
+	agent := client.Collection("test").GetObjectById(id)
 	if err := agent.Do(); nil != err {
 		t.Error(err.Error())
 	}
@@ -70,7 +66,7 @@ func TestClassQuery(t *testing.T) {
 	client := NewClient(os.Getenv("LEAN_APPID"),
 		os.Getenv("LEAN_APPKEY"),
 		os.Getenv("LEAN_MASTERKEY"))
-	agent := client.Query("test")
+	agent := client.Collection("test").Query()
 	q := query.Lt("tester", LeanTime{time.Now()})
 	agent.WithQuery(q).Limit(1)
 	agent.Do()

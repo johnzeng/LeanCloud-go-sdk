@@ -16,6 +16,29 @@ type LeanByte struct {
 	bytes []byte
 }
 
+type LeanTime struct {
+	time.Time
+}
+
+//{
+//  "__type": "Pointer",
+//  "className": "Post",
+//  "objectId": "55a39634e4b0ed48f0c1845c"
+//}
+type LeanPointer struct {
+	class    string `json:"className"`
+	objectId string `json:"objectId"`
+}
+
+//???
+type LeanRelation struct {
+}
+
+type AVObject interface {
+	typeName() string
+	fillByMap(map[string]string) error
+}
+
 func NewLeanByte(in []byte) LeanByte {
 	return LeanByte{
 		bytes: in,
@@ -37,10 +60,6 @@ func (this *LeanByte) fillByMap(in map[string]string) error {
 		this.bytes = bytes
 		return nil
 	}
-}
-
-type LeanTime struct {
-	time.Time
 }
 
 func NewLeanTime(t time.Time) LeanTime {
@@ -117,11 +136,6 @@ func str2Date(str string) (*LeanTime, error) {
 	} else {
 		return &LeanTime{ret}, nil
 	}
-}
-
-type AVObject interface {
-	typeName() string
-	fillByMap(map[string]string) error
 }
 
 func bytes2AvObject(str []byte, obj AVObject) error {
