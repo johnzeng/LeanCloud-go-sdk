@@ -21,6 +21,7 @@ go install
 - requestSmsCode, verifySmsCode（需要在控制台设置开放这两个接口）
 - push notification(待测试)
 - 支持LeanCloud的Date，Byte格式。
+- 支持LeanTIme，LeanPointer，LeanByte类型。
 
 具体使用方法请参考对应的test文件。里面每个test都是完整的请求。
 
@@ -30,7 +31,9 @@ go install
 
 - 实时通信API
 - User,Installation, role等系统结构体的集成
-- Pointer，File以及Relation数据结构支持。
+- File以及Relation数据结构支持。
 - 事件流API
 - 数据Schema
 - 统计数据API
+
+

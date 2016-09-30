@@ -5,21 +5,23 @@ import (
 )
 
 type Collection struct {
-	client leanClient
-	class  string
+	client      leanClient
+	class       string
+	classSubfix string
 }
 
 func (this leanClient) Collection(collection string) Collection {
 	return Collection{
-		client: this,
-		class:  collection,
+		client:      this,
+		class:       collection,
+		classSubfix: "/classes/" + collection,
 	}
 }
 
 //create an object
 func (this Collection) Create(obj interface{}) *Agent {
 	request := gorequest.New()
-	classesUrl := ClasssesUrlBase + "/" + this.class
+	classesUrl := UrlBase + this.classSubfix
 	superAgent := request.Post(classesUrl).
 		Send(obj)
 	return &Agent{
@@ -31,7 +33,7 @@ func (this Collection) Create(obj interface{}) *Agent {
 //get an object by objectId
 func (this Collection) GetObjectById(objectId string) *Agent {
 	request := gorequest.New()
-	classesUrl := ClasssesUrlBase + "/" + this.class + "/" + objectId
+	classesUrl := UrlBase + this.classSubfix + "/" + objectId
 	superAgent := request.Get(classesUrl)
 	return &Agent{
 		superAgent: superAgent,
@@ -42,7 +44,7 @@ func (this Collection) GetObjectById(objectId string) *Agent {
 //you can also specialfy the query parameter, if you don't provide the id, you will delete the objects by query
 func (this Collection) DeleteObjectById(objectId string) *QueryAgent {
 	request := gorequest.New()
-	classesUrl := ClasssesUrlBase + "/" + this.class
+	classesUrl := UrlBase + this.classSubfix
 	if "" != objectId {
 		classesUrl = classesUrl + "/" + objectId
 	}
@@ -56,7 +58,7 @@ func (this Collection) DeleteObjectById(objectId string) *QueryAgent {
 //you can also specialfy the query parameter, if you don't provide the id, you will update the object by query
 func (this Collection) UpdateObjectById(objectId string, obj interface{}) *UpdateAgent {
 	request := gorequest.New()
-	classesUrl := ClasssesUrlBase + "/" + this.class
+	classesUrl := UrlBase + this.classSubfix
 	if "" != objectId {
 		classesUrl = classesUrl + "/" + objectId
 	}
@@ -70,7 +72,7 @@ func (this Collection) UpdateObjectById(objectId string, obj interface{}) *Updat
 
 func (this Collection) Query() *QueryAgent {
 	request := gorequest.New()
-	classesUrl := ClasssesUrlBase + "/" + this.class
+	classesUrl := UrlBase + this.classSubfix
 	superAgent := request.Get(classesUrl)
 	agent := Agent{
 		superAgent: superAgent,
