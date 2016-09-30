@@ -28,6 +28,7 @@ func (this Collection) Create(obj interface{}) *Agent {
 	}
 }
 
+//get an object by objectId
 func (this Collection) GetObjectById(objectId string) *Agent {
 	request := gorequest.New()
 	classesUrl := ClasssesUrlBase + "/" + this.class + "/" + objectId

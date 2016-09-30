@@ -64,5 +64,4 @@ func (client leanClient) VerifyCode(phone, code string) error {
 	} else {
 		return nil
 	}
-
 }
