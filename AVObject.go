@@ -26,12 +26,22 @@ type LeanTime struct {
 //  "objectId": "55a39634e4b0ed48f0c1845c"
 //}
 type LeanPointer struct {
-	class    string `json:"className"`
-	objectId string `json:"objectId"`
+	class    string
+	objectId string
 }
 
 //???
 type LeanRelation struct {
+}
+
+func (t *LeanPointer) typeName() string {
+	return "Pointer"
+}
+
+func (t *LeanPointer) fillByMap(m map[string]string) error {
+	t.class = m["className"]
+	t.objectId = m["objectId"]
+	return nil
 }
 
 type AVObject interface {
@@ -64,6 +74,24 @@ func (this *LeanByte) fillByMap(in map[string]string) error {
 
 func NewLeanTime(t time.Time) LeanTime {
 	return LeanTime{t}
+}
+
+func (t *LeanPointer) UnmarshalJSON(i []byte) error {
+	//do your serializing here
+	if converErr := bytes2AvObject(i, t); nil != converErr {
+		return converErr
+	} else {
+		return nil
+	}
+}
+
+func (t LeanPointer) MarshalJSON() ([]byte, error) {
+	str := fmt.Sprintf(`{
+		"__type": "Pointer",
+		"className": "%s",
+		"objectId":"%s"
+	}`, t.class, t.objectId)
+	return []byte(str), nil
 }
 
 //convet json into TimeStamp, we take only the unix timestamp seconds

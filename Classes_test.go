@@ -111,6 +111,7 @@ func TestClassUpdateByPart(t *testing.T) {
 
 	test.Array[0] = "hello"
 	agent := client.Collection("test").UpdateObjectById(id, updateObj)
+	//if you don't wanna update by master key, you need to specify the id in update object body
 	agent.UseMasterKey()
 	if err := agent.Do(); nil != err {
 		t.Error(err.Error())
