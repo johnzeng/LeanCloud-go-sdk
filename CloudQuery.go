@@ -5,7 +5,7 @@ import (
 	"github.com/parnurzeal/gorequest"
 )
 
-func (this leanClient) CloudQuery(cql string, pvalues ...interface{}) *Agent {
+func (this *leanClient) CloudQuery(cql string, pvalues ...interface{}) *Agent {
 	if cql == "" {
 		return nil
 	}

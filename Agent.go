@@ -11,7 +11,7 @@ import (
 )
 
 type Agent struct {
-	client       leanClient
+	client       *leanClient
 	superAgent   *gorequest.SuperAgent
 	body         string
 	useSignature bool

@@ -24,7 +24,7 @@ type RequestMobilePhoneVerify struct {
 }
 
 //request a mobile phone verify
-func (client leanClient) RequestMobilVerify(
+func (client *leanClient) RequestMobilVerify(
 	verifyRequest RequestMobilePhoneVerify) error {
 
 	request := gorequest.New()
@@ -46,7 +46,7 @@ func (client leanClient) RequestMobilVerify(
 }
 
 //verfiy the code
-func (client leanClient) VerifyCode(phone, code string) error {
+func (client *leanClient) VerifyCode(phone, code string) error {
 	request := gorequest.New()
 	url := UrlBase + "/verifySmsCode/" + code
 	superAgent := request.Post(url).

@@ -3,17 +3,33 @@ package lean
 type leanClient struct {
 	appId, appKey, masterKey string
 	useSign                  bool
+	Installation, User, Role *Collection
 }
 
 //create a new lean client.
 //You only need one client in a go application
 //application will not check your keys if you don't call API that needs it
 func NewClient(appId, appKey, masterKey string) *leanClient {
-	return &leanClient{
+
+	ret := &leanClient{
 		appId:     appId,
 		appKey:    appKey,
 		masterKey: masterKey,
 	}
+
+	installation := ret.Collection("_Installation")
+	ret.Installation = &installation
+	ret.Installation.classSubfix = "/installaions"
+
+	user := ret.Collection("_User")
+	ret.User = &(user)
+	ret.User.classSubfix = "/users"
+
+	role := ret.Collection("_Role")
+	ret.Role = &(role)
+	ret.Role.classSubfix = "/Role"
+
+	return ret
 }
 
 const (
