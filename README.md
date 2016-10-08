@@ -21,8 +21,7 @@ go install
 - cql query support
 - requestSmsCode, verifySmsCode（需要在控制台设置开放这两个接口）
 - push notification(待测试)
-- 支持LeanCloud的Date，Byte格式。
-- 支持LeanTIme，LeanPointer，LeanByte, LeanRelation类型。
+- 支持LeanTime，LeanPointer，LeanByte, LeanRelation, LeanFile类型。
 - User,Installation, Role等系统结构体的集成
 
 具体使用方法请参考对应的test文件。里面每个test都是完整的请求。
@@ -31,7 +30,6 @@ go install
 # Todo:
 
 - Cloud function 支持
-- File数据结构支持。
 - 事件流API
 - 实时通信API
 - 数据Schema

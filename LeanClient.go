@@ -4,6 +4,7 @@ type leanClient struct {
 	appId, appKey, masterKey string
 	useSign                  bool
 	Installation, User, Role *Collection
+	File                     *Collection
 }
 
 //create a new lean client.
@@ -27,7 +28,11 @@ func NewClient(appId, appKey, masterKey string) *leanClient {
 
 	role := ret.Collection("_Role")
 	ret.Role = &(role)
-	ret.Role.classSubfix = "/Role"
+	ret.Role.classSubfix = "/roles"
+
+	file := ret.Collection("_File")
+	ret.File = &(role)
+	ret.File.classSubfix = "/files"
 
 	return ret
 }
