@@ -31,7 +31,7 @@ func NewClient(appId, appKey, masterKey string) *leanClient {
 	ret.Role.classSubfix = "/roles"
 
 	file := ret.Collection("_File")
-	ret.File = &(role)
+	ret.File = &(file)
 	ret.File.classSubfix = "/files"
 
 	return ret

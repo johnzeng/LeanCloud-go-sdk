@@ -73,6 +73,11 @@ func TestClassQuery(t *testing.T) {
 	agent.Do()
 	ret := TestResp{}
 	agent.ScanResponse(&ret)
+	if len(ret.Results) == 0 {
+		t.Errorf("message is wrong:%v", ret)
+		t.Log(agent.body)
+		return
+	}
 	if ret.Results[0].Hello != "this is first message" {
 		t.Errorf("message is wrong:%v", ret)
 		t.Log(agent.body)
@@ -117,4 +122,37 @@ func TestClassUpdateByPart(t *testing.T) {
 		t.Error(err.Error())
 		t.Log(agent.superAgent.Data)
 	}
+}
+
+func TestClassDelete(t *testing.T) {
+	client := NewClient(os.Getenv("LEAN_APPID"),
+		os.Getenv("LEAN_APPKEY"),
+		os.Getenv("LEAN_MASTERKEY"))
+	agent := client.Collection("test").DeleteObjectById(id)
+	agent.UseMasterKey()
+	if err := agent.Do(); nil != err {
+		t.Error(err.Error())
+	}
+}
+
+func TestClassScan(t *testing.T) {
+	client := NewClient(os.Getenv("LEAN_APPID"),
+		os.Getenv("LEAN_APPKEY"),
+		os.Getenv("LEAN_MASTERKEY"))
+	agent := client.Collection("test").Scan("", "")
+	q := query.Eq("hi", "this is first message")
+	agent.WithQuery(q).Limit(1)
+	agent.Do()
+	ret := TestResp{}
+	agent.ScanResponse(&ret)
+	if len(ret.Results) == 0 {
+		t.Errorf("message is wrong:%v", ret)
+		t.Log(agent.body)
+		return
+	}
+	if ret.Results[0].Hello != "this is first message" {
+		t.Errorf("message is wrong:%v", ret)
+		t.Log(agent.body)
+	}
+
 }

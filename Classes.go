@@ -86,6 +86,7 @@ func (this Collection) Scan(cursor, key string) *QueryAgent {
 		superAgent: superAgent,
 		client:     this.client,
 	}
+	agent.UseMasterKey()
 	return &QueryAgent{agent}
 }
 

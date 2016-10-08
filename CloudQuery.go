@@ -1,7 +1,7 @@
 package lean
 
 import (
-	"fmt"
+	"encoding/json"
 	"github.com/parnurzeal/gorequest"
 )
 
@@ -16,7 +16,12 @@ func (this *leanClient) CloudQuery(cql string, pvalues ...interface{}) *Agent {
 	superAgent.QueryData.Add("cql", cql)
 
 	if len(pvalues) != 0 {
-		superAgent.QueryData.Add("pvalues", fmt.Sprintf("%x", pvalues))
+		if jsonByte, err := json.Marshal(pvalues); nil != err {
+			return nil
+		} else {
+			superAgent.QueryData.Add("pvalues", string(jsonByte))
+
+		}
 	}
 
 	return &Agent{
