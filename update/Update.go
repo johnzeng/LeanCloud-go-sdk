@@ -3,7 +3,6 @@ package update
 import (
 	"encoding/json"
 	"errors"
-	"github.com/johnzeng/leancloud-go-sdk"
 )
 
 type Update struct {
@@ -122,7 +121,8 @@ func RemoveFromArray(key string, value ...interface{}) *Update {
 	return &Update{ret}
 }
 
-func AddRelation(key string, targets ...lean.LeanPointer) *Update {
+//accept only LeanPointer as targets
+func AddRelation(key string, targets ...interface{}) *Update {
 	ret := map[string]interface{}{
 		key: map[string]interface{}{
 			"__op":    "AddRelation",
@@ -132,7 +132,8 @@ func AddRelation(key string, targets ...lean.LeanPointer) *Update {
 	return &Update{ret}
 }
 
-func RemoveRelation(key string, targets ...lean.LeanPointer) *Update {
+//accept only LeanPointer as targets
+func RemoveRelation(key string, targets ...interface{}) *Update {
 	ret := map[string]interface{}{
 		key: map[string]interface{}{
 			"__op":    "RemoveRelation",

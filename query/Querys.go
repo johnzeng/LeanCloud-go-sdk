@@ -73,6 +73,31 @@ func Exists(key string, value bool) *Query {
 	return compare(key, "$exists", value)
 }
 
+//accept only LeanPointer
+func RelatedTo(key string, value interface{}) *Query {
+	return &Query{
+		map[string]interface{}{
+			"key": key,
+			"$relatedTo": map[string]interface{}{
+				"object": value,
+			},
+		},
+	}
+}
+
+//accept only LeanPointer
+func InQuery(key string, query *Query) *Query {
+	return &Query{
+		map[string]interface{}{
+			key: map[string]interface{}{
+				"$inQuery": map[string]*Query{
+					"where": query,
+				},
+			},
+		},
+	}
+}
+
 //????
 func Select(key string, value interface{}) *Query {
 	return nil
