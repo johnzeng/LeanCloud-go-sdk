@@ -70,6 +70,25 @@ func (this Collection) UpdateObjectById(objectId string, obj interface{}) *Updat
 	}}}
 }
 
+//leave cursor and key empty if they are empty
+func (this Collection) Scan(cursor, key string) *QueryAgent {
+	request := gorequest.New()
+	classesUrl := UrlBase + "/scan" + this.classSubfix
+	superAgent := request.Get(classesUrl)
+	if "" != cursor {
+		superAgent.QueryData.Add("cursor", cursor)
+	}
+
+	if "" != key {
+		superAgent.QueryData.Add("scan_key", key)
+	}
+	agent := Agent{
+		superAgent: superAgent,
+		client:     this.client,
+	}
+	return &QueryAgent{agent}
+}
+
 func (this Collection) Query() *QueryAgent {
 	request := gorequest.New()
 	classesUrl := UrlBase + this.classSubfix
