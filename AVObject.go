@@ -8,6 +8,15 @@ import (
 	"time"
 )
 
+// "picture": {
+//          "id": "543cbaede4b07db196f50f3c",
+//          "__type": "File"
+//  }
+
+type LeanFile struct {
+	Id string
+}
+
 //{
 //  "__type": "Bytes",
 //  "base64": "5b6I5aSa55So5oi36KGo56S65b6I5Zac5qyi5oiR5Lus55qE5paH5qGj6aOO5qC877yM5oiR5Lus5bey5bCGIExlYW5DbG91ZCDmiYDmnInmlofmoaPnmoQgTWFya2Rvd24g5qC85byP55qE5rqQ56CB5byA5pS+5Ye65p2l44CC"
@@ -87,6 +96,23 @@ func (t *LeanPointer) UnmarshalJSON(i []byte) error {
 	}
 }
 
+func (t LeanFile) MarshalJSON() ([]byte, error) {
+	str := fmt.Sprintf(`{
+		"__type": "File",
+		"id":"%s"
+	}`, t.Id)
+	return []byte(str), nil
+}
+
+func (t *LeanFile) UnmarshalJSON(i []byte) error {
+	//do your serializing here
+	if converErr := bytes2AvObject(i, t); nil != converErr {
+		return converErr
+	} else {
+		return nil
+	}
+}
+
 func (t LeanPointer) MarshalJSON() ([]byte, error) {
 	str := fmt.Sprintf(`{
 		"__type": "Pointer",
@@ -125,12 +151,27 @@ func (t LeanTime) MarshalJSON() ([]byte, error) {
 	return []byte(str), nil
 }
 
+func (t *LeanFile) typeName() string {
+	return "File"
+}
+
+func (t *LeanFile) fillByMap(m map[string]string) error {
+	if id, exist := m["id"]; false == exist {
+		return errors.New("wrong data type")
+	} else {
+		t.Id = id
+	}
+	return nil
+}
 func (t *LeanTime) typeName() string {
 	return "Date"
 }
 
 func (t *LeanTime) fillByMap(m map[string]string) error {
-	timeStr := m["iso"]
+	timeStr, exist := m["iso"]
+	if false == exist {
+		return errors.New("wrong data type")
+	}
 	if ret, err := str2Date(timeStr); nil != err {
 		return err
 	} else {
