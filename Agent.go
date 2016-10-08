@@ -17,6 +17,7 @@ type Agent struct {
 	useSignature bool
 	useMasterKey bool
 	ts           int64
+	token        string
 }
 
 type QueryAgent struct {
@@ -25,6 +26,12 @@ type QueryAgent struct {
 
 type UpdateAgent struct {
 	QueryAgent
+}
+
+func (this *Agent) UseSessionToken(token string) *Agent {
+	this.superAgent.
+		Set("X-LC-Session", token)
+	return this
 }
 
 func (this *QueryAgent) WithKeys(key string) *QueryAgent {
