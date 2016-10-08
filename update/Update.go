@@ -3,6 +3,7 @@ package update
 import (
 	"encoding/json"
 	"errors"
+	"github.com/johnzeng/leancloud-go-sdk"
 )
 
 type Update struct {
@@ -39,6 +40,16 @@ func (this *Update) And(u *Update) *Update {
 		this.update[key] = value
 	}
 	return this
+}
+
+func Decrement(key string, value interface{}) *Update {
+	ret := map[string]interface{}{
+		key: map[string]interface{}{
+			"__op":   "Decrement",
+			"amount": value,
+		},
+	}
+	return &Update{ret}
 }
 
 func Increment(key string, value interface{}) *Update {
@@ -106,6 +117,26 @@ func RemoveFromArray(key string, value ...interface{}) *Update {
 		key: map[string]interface{}{
 			"__op":    "Remove",
 			"objects": value,
+		},
+	}
+	return &Update{ret}
+}
+
+func AddRelation(key string, targets ...lean.LeanPointer) *Update {
+	ret := map[string]interface{}{
+		key: map[string]interface{}{
+			"__op":    "AddRelation",
+			"objects": targets,
+		},
+	}
+	return &Update{ret}
+}
+
+func RemoveRelation(key string, targets ...lean.LeanPointer) *Update {
+	ret := map[string]interface{}{
+		key: map[string]interface{}{
+			"__op":    "RemoveRelation",
+			"objects": targets,
 		},
 	}
 	return &Update{ret}
