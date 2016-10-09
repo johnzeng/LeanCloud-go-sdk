@@ -20,6 +20,24 @@ type Test struct {
 
 var id string
 
+//remember to uncomment this if you run this test first time otherwise you will get error on scan and query
+/*func TestCreateObjectFirstRun(t *testing.T) {
+	client := NewClient(os.Getenv("LEAN_APPID"),
+		os.Getenv("LEAN_APPKEY"),
+		os.Getenv("LEAN_MASTERKEY"))
+	agent := client.Collection("test").Create(
+		Test{
+			Hello:     "this is first message",
+			notUpload: "nono",
+			Ignore:    "ignore",
+			TestDate:  NewLeanTime(time.Now()),
+		})
+
+	if err := agent.Do(); nil != err {
+		t.Error(err.Error())
+	}
+}*/
+
 func TestCreateObject(t *testing.T) {
 	client := NewClient(os.Getenv("LEAN_APPID"),
 		os.Getenv("LEAN_APPKEY"),
