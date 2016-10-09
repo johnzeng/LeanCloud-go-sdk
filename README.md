@@ -34,3 +34,18 @@ go install
 - 实时通信API
 - 数据Schema
 - 统计数据API
+
+# How to test:
+需要设置以下环境变量：
+
+```shell
+export LEAN_APPID=aawgeiyg3491v
+export LEAN_APPKEY=sdb9bg9408
+export LEAN_MASTERKEY=aslng18gbiq98
+export LEAN_TEST_PHONE_NUMBER=1111111111
+export LEAN_TEST_USER=john
+export LEAN_TEST_PWD=11111111111
+```
+
+根据自己的测试app情况进行设置接口（当然上面的是假的，怎么可能将真的key丢出来呢）
+
