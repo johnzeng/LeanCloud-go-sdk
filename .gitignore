@@ -12,6 +12,7 @@ _test
 [568vq].out
 
 vendor/
+coverage.out
 
 *.cgo1.go
 *.cgo2.c
