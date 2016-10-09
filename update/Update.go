@@ -41,6 +41,13 @@ func (this *Update) And(u *Update) *Update {
 	return this
 }
 
+func Set(key string, value interface{}) *Update {
+	ret := map[string]interface{}{
+		key: value,
+	}
+	return &Update{ret}
+}
+
 func Decrement(key string, value interface{}) *Update {
 	ret := map[string]interface{}{
 		key: map[string]interface{}{

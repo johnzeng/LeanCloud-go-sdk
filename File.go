@@ -9,7 +9,7 @@ import (
 )
 
 //be attention that EmailVerified and MobilePhoneVerified can be nil
-type File struct {
+type FullLeanFile struct {
 	LeanClassesBase
 	Name     string                 `json:"name,omitempty"`
 	FileType string                 `json:"mime_type,omitempty"`
@@ -20,7 +20,7 @@ type File struct {
 	MetaData map[string]interface{} `json:"metaData,omitempty"`
 }
 
-func (this *leanClient) UploadPlainText(fileName, content string) (*File, error) {
+func (this *leanClient) UploadPlainText(fileName, content string) (*FullLeanFile, error) {
 	url := UrlBase + "/files/" + fileName
 	request := gorequest.New()
 	superAgent := request.Post(url).
@@ -36,7 +36,7 @@ func (this *leanClient) UploadPlainText(fileName, content string) (*File, error)
 		return nil, err
 	}
 
-	ret := &File{}
+	ret := &FullLeanFile{}
 
 	if err := agent.ScanResponse(ret); nil != err {
 		return nil, err
@@ -46,7 +46,7 @@ func (this *leanClient) UploadPlainText(fileName, content string) (*File, error)
 }
 
 //content-type can be text/plain,image/*, or empty
-func (this *leanClient) UploadFile(fileName, contentType string, file *os.File) (*File, error) {
+func (this *leanClient) UploadFile(fileName, contentType string, file *os.File) (*FullLeanFile, error) {
 	//as gorequest doesn't have a good support for binary request, so I have to make the request by native http.request api,this is bad
 	url := UrlBase + "/files/" + fileName
 
@@ -66,7 +66,7 @@ func (this *leanClient) UploadFile(fileName, contentType string, file *os.File) 
 		return nil, err
 	}
 
-	ret := &File{}
+	ret := &FullLeanFile{}
 	retBytes, err := ioutil.ReadAll(httpResponse.Body)
 	if nil != err {
 		return nil, err

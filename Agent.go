@@ -49,11 +49,6 @@ func (this *QueryAgent) WithQuery(q *query.Query) *QueryAgent {
 	return this
 }
 
-func (this *QueryAgent) WithCql(cql string) *QueryAgent {
-	this.superAgent.QueryData.Add("cql", cql)
-	return this
-}
-
 func (this *QueryAgent) Limit(l int) *QueryAgent {
 	this.superAgent.QueryData.Add("limit", fmt.Sprintf("%d", l))
 	return this

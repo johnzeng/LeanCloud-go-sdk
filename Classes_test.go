@@ -15,11 +15,11 @@ type Test struct {
 	TestDate     *LeanTime     `json:"tester,omitempty"`
 	TestRelation *LeanRelation `json:"user,omitempty"`
 	//we have some problem on LeanFile API
-	//	TestFile     *LeanFile     `json:"filePtr,omitempty"`
-	TestPointer *LeanPointer `json:"userPtr,omitempty"`
-	notUpload   string       `json:"notUpload,omitempty"`
-	Ignore      string       `json:"-"`
-	Array       []string     `json:"ss,omitempty"`
+	TestFile    *FullLeanFile `json:"filePtr,omitempty"`
+	TestPointer *LeanPointer  `json:"userPtr,omitempty"`
+	notUpload   string        `json:"notUpload,omitempty"`
+	Ignore      string        `json:"-"`
+	Array       []string      `json:"ss,omitempty"`
 }
 
 var id string
@@ -78,7 +78,7 @@ func TestClassQuery(t *testing.T) {
 		os.Getenv("LEAN_MASTERKEY"))
 	agent := client.Collection("test").Query()
 	q := query.Eq("hi", "this is first message")
-	agent.WithQuery(q).Limit(1)
+	agent.WithQuery(q).Limit(1).Skip(1).Order("hi").WithCount().UseSignature()
 	agent.Do()
 	ret := TestResp{}
 	agent.ScanResponse(&ret)
@@ -129,12 +129,20 @@ func TestClassUpdateByPart(t *testing.T) {
 		os.Getenv("LEAN_MASTERKEY"))
 
 	addObj := update.AddToArray("ss", "123", "456")
-	updateObj := update.AddRelation("user", LeanPointer{class: "_user", objectId: userId}).And(addObj)
+	addFile := update.Set("filePtr", LeanFile{Id: fileId})
+	updateObj := update.AddRelation("user", LeanPointer{class: "_user", objectId: userId}).And(addObj).And(addFile)
 
 	agent := client.Collection("test").UpdateObjectById(id, updateObj)
 	//if you don't wanna update by master key, you need to specify the id in update object body
 	agent.UseMasterKey()
 	if err := agent.Do(); nil != err {
+		t.Error(err.Error())
+		t.Log(agent.superAgent.Data)
+	}
+
+	ret := Test{}
+	if err := agent.ScanResponse(&ret); nil != err {
+
 		t.Error(err.Error())
 		t.Log(agent.superAgent.Data)
 	}

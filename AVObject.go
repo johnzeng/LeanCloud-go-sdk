@@ -14,7 +14,6 @@ import (
 //  }
 
 type LeanFile struct {
-	File
 	Id string
 }
 
@@ -88,13 +87,13 @@ func NewLeanTime(t time.Time) LeanTime {
 	return LeanTime{t}
 }
 
-//func (t *LeanPointer) UnmarshalJSON(i []byte) error {
-//	if converErr := bytes2AvObject(i, t); nil != converErr {
-//		return converErr
-//	} else {
-//		return nil
-//	}
-//}
+func (t *LeanPointer) UnmarshalJSON(i []byte) error {
+	if converErr := bytes2AvObject(i, t); nil != converErr {
+		return converErr
+	} else {
+		return nil
+	}
+}
 
 func (t LeanFile) MarshalJSON() ([]byte, error) {
 	str := fmt.Sprintf(`{
@@ -104,14 +103,14 @@ func (t LeanFile) MarshalJSON() ([]byte, error) {
 	return []byte(str), nil
 }
 
-func (t *LeanFile) UnmarshalJSON(i []byte) error {
-	//do your serializing here
-	if converErr := bytes2AvObject(i, t); nil != converErr {
-		return converErr
-	} else {
-		return nil
-	}
-}
+//no return will be a LeanFile, they always return a FullLeanFile
+//func (t *LeanFile) UnmarshalJSON(i []byte) error {
+//	if converErr := bytes2AvObject(i, t); nil != converErr {
+//		return converErr
+//	} else {
+//		return nil
+//	}
+//}
 
 func (t LeanPointer) MarshalJSON() ([]byte, error) {
 	str := fmt.Sprintf(`{
@@ -151,18 +150,18 @@ func (t LeanTime) MarshalJSON() ([]byte, error) {
 	return []byte(str), nil
 }
 
-func (t *LeanFile) typeName() string {
-	return "File"
-}
-
-func (t *LeanFile) fillByMap(m map[string]string) error {
-	if id, exist := m["id"]; false == exist {
-		return errors.New("wrong data type")
-	} else {
-		t.Id = id
-	}
-	return nil
-}
+//func (t *LeanFile) typeName() string {
+//	return "File"
+//}
+//
+//func (t *LeanFile) fillByMap(m map[string]string) error {
+//	if id, exist := m["id"]; false == exist {
+//		return errors.New("wrong data type")
+//	} else {
+//		t.Id = id
+//	}
+//	return nil
+//}
 func (t *LeanTime) typeName() string {
 	return "Date"
 }
