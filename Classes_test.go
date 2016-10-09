@@ -10,10 +10,10 @@ import (
 
 type Test struct {
 	LeanClassesBase
-	Hello     string   `json:"hi"`
-	TestBytes LeanByte `json:"bytess"`
-	TestDate  LeanTime `json:"tester"`
-	notUpload string   `json:"notUpload"`
+	Hello     string   `json:"hi,omitempty"`
+	TestBytes LeanByte `json:"bytess,omitempty"`
+	TestDate  LeanTime `json:"tester,omitempty"`
+	notUpload string   `json:"notUpload,omitempty"`
 	Ignore    string   `json:"-"`
 	Array     []string `json:"ss,omitempty"`
 }
@@ -40,6 +40,7 @@ func TestCreateObject(t *testing.T) {
 	if err := agent.ScanResponse(&ret); err != nil {
 		t.Error(err.Error())
 	} else {
+		t.Logf("%x", ret)
 		id = ret.ObjectId
 	}
 }
@@ -108,13 +109,8 @@ func TestClassUpdateByPart(t *testing.T) {
 		os.Getenv("LEAN_APPKEY"),
 		os.Getenv("LEAN_MASTERKEY"))
 
-	test := Test{
-		Array: make([]string, 1),
-	}
-
 	updateObj := update.AddToArray("ss", "123", "456")
 
-	test.Array[0] = "hello"
 	agent := client.Collection("test").UpdateObjectById(id, updateObj)
 	//if you don't wanna update by master key, you need to specify the id in update object body
 	agent.UseMasterKey()
