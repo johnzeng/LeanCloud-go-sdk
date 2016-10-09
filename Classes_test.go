@@ -13,9 +13,9 @@ type Test struct {
 	Hello        string        `json:"hi,omitempty"`
 	TestBytes    *LeanByte     `json:"bytess,omitempty"`
 	TestDate     *LeanTime     `json:"tester,omitempty"`
-	TestPointer  *LeanPointer  `json:"user,omitempty"`
+	TestRelation *LeanRelation `json:"user,omitempty"`
 	TestFile     *LeanFile     `json:"file, omitempty"`
-	TestRelation *LeanRelation `json:"relate,omitempty"`
+	TestPointer  *LeanPointer  `json:"userPtr,omitempty"`
 	notUpload    string        `json:"notUpload,omitempty"`
 	Ignore       string        `json:"-"`
 	Array        []string      `json:"ss,omitempty"`
@@ -46,9 +46,11 @@ func TestCreateObject(t *testing.T) {
 		os.Getenv("LEAN_APPKEY"),
 		os.Getenv("LEAN_MASTERKEY"))
 	now := NewLeanTime(time.Now())
+	bytes := NewLeanByte([]byte("hello"))
 	agent := client.Collection("test").Create(
 		Test{
 			Hello:     "this is first message",
+			TestBytes: &bytes,
 			notUpload: "nono",
 			Ignore:    "ignore",
 			TestDate:  &now,
@@ -132,7 +134,11 @@ func TestClassUpdateByPart(t *testing.T) {
 		os.Getenv("LEAN_APPKEY"),
 		os.Getenv("LEAN_MASTERKEY"))
 
-	updateObj := update.AddToArray("ss", "123", "456")
+	TestUserLogin(t)
+	TestUploadPlainText(t)
+
+	addObj := update.AddToArray("ss", "123", "456")
+	updateObj := update.AddRelation("user", LeanPointer{class: "_user", objectId: userId}).And(addObj)
 
 	agent := client.Collection("test").UpdateObjectById(id, updateObj)
 	//if you don't wanna update by master key, you need to specify the id in update object body
@@ -140,17 +146,6 @@ func TestClassUpdateByPart(t *testing.T) {
 	if err := agent.Do(); nil != err {
 		t.Error(err.Error())
 		t.Log(agent.superAgent.Data)
-	}
-}
-
-func TestClassDelete(t *testing.T) {
-	client := NewClient(os.Getenv("LEAN_APPID"),
-		os.Getenv("LEAN_APPKEY"),
-		os.Getenv("LEAN_MASTERKEY"))
-	agent := client.Collection("test").DeleteObjectById(id)
-	agent.UseMasterKey()
-	if err := agent.Do(); nil != err {
-		t.Error(err.Error())
 	}
 }
 
@@ -174,4 +169,15 @@ func TestClassScan(t *testing.T) {
 		t.Log(agent.body)
 	}
 
+}
+
+func TestClassDelete(t *testing.T) {
+	client := NewClient(os.Getenv("LEAN_APPID"),
+		os.Getenv("LEAN_APPKEY"),
+		os.Getenv("LEAN_MASTERKEY"))
+	agent := client.Collection("test").DeleteObjectById(id)
+	agent.UseMasterKey()
+	if err := agent.Do(); nil != err {
+		t.Error(err.Error())
+	}
 }

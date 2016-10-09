@@ -212,12 +212,10 @@ func str2Date(str string) (*LeanTime, error) {
 func bytes2AvObject(str []byte, obj AVObject) error {
 	object := map[string]string{}
 	if err := json.Unmarshal([]byte(str), &object); nil != err {
-		println("to map error")
 		return err
 	} else {
 		if object["__type"] != obj.typeName() {
-			println("type error")
-			return errors.New("type wrong!")
+			return errors.New("type wrong! name is :" + obj.typeName())
 		}
 		if err := obj.fillByMap(object); nil != err {
 			return err
