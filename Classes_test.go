@@ -10,12 +10,13 @@ import (
 
 type Test struct {
 	LeanClassesBase
-	Hello     string   `json:"hi,omitempty"`
-	TestBytes LeanByte `json:"bytess,omitempty"`
-	TestDate  LeanTime `json:"tester,omitempty"`
-	notUpload string   `json:"notUpload,omitempty"`
-	Ignore    string   `json:"-"`
-	Array     []string `json:"ss,omitempty"`
+	Hello       string    `json:"hi,omitempty"`
+	TestBytes   *LeanByte `json:"bytess,omitempty"`
+	TestDate    *LeanTime `json:"tester,omitempty"`
+	TestPointer *Pointer  `json:"user,omitempty"`
+	notUpload   string    `json:"notUpload,omitempty"`
+	Ignore      string    `json:"-"`
+	Array       []string  `json:"ss,omitempty"`
 }
 
 var id string

@@ -11,10 +11,10 @@ import (
 //be attention that EmailVerified and MobilePhoneVerified can be nil
 type File struct {
 	LeanClassesBase
-	Name   string `json:"name,omitempt"`
-	Type   string `json:"__type,omitempt"`
-	Url    string `json:"url,omitempt"`
-	Bucket string `json:"bucket, omitempt"`
+	Name   string `json:"name,omitempty"`
+	Type   string `json:"__type,omitempty"`
+	Url    string `json:"url,omitempty"`
+	Bucket string `json:"bucket, omitempty"`
 }
 
 func (this *leanClient) UploadPlainText(fileName, content string) (*File, error) {
