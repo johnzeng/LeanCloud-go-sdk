@@ -14,6 +14,7 @@ import (
 //  }
 
 type LeanFile struct {
+	File
 	Id string
 }
 
@@ -87,14 +88,13 @@ func NewLeanTime(t time.Time) LeanTime {
 	return LeanTime{t}
 }
 
-func (t *LeanPointer) UnmarshalJSON(i []byte) error {
-	//do your serializing here
-	if converErr := bytes2AvObject(i, t); nil != converErr {
-		return converErr
-	} else {
-		return nil
-	}
-}
+//func (t *LeanPointer) UnmarshalJSON(i []byte) error {
+//	if converErr := bytes2AvObject(i, t); nil != converErr {
+//		return converErr
+//	} else {
+//		return nil
+//	}
+//}
 
 func (t LeanFile) MarshalJSON() ([]byte, error) {
 	str := fmt.Sprintf(`{
