@@ -10,13 +10,15 @@ import (
 
 type Test struct {
 	LeanClassesBase
-	Hello       string    `json:"hi,omitempty"`
-	TestBytes   *LeanByte `json:"bytess,omitempty"`
-	TestDate    *LeanTime `json:"tester,omitempty"`
-	TestPointer *Pointer  `json:"user,omitempty"`
-	notUpload   string    `json:"notUpload,omitempty"`
-	Ignore      string    `json:"-"`
-	Array       []string  `json:"ss,omitempty"`
+	Hello        string        `json:"hi,omitempty"`
+	TestBytes    *LeanByte     `json:"bytess,omitempty"`
+	TestDate     *LeanTime     `json:"tester,omitempty"`
+	TestPointer  *LeanPointer  `json:"user,omitempty"`
+	TestFile     *LeanFile     `json:"file, omitempty"`
+	TestRelation *LeanRelation `json:"relate,omitempty"`
+	notUpload    string        `json:"notUpload,omitempty"`
+	Ignore       string        `json:"-"`
+	Array        []string      `json:"ss,omitempty"`
 }
 
 var id string
@@ -43,12 +45,13 @@ func TestCreateObject(t *testing.T) {
 	client := NewClient(os.Getenv("LEAN_APPID"),
 		os.Getenv("LEAN_APPKEY"),
 		os.Getenv("LEAN_MASTERKEY"))
+	now := NewLeanTime(time.Now())
 	agent := client.Collection("test").Create(
 		Test{
 			Hello:     "this is first message",
 			notUpload: "nono",
 			Ignore:    "ignore",
-			TestDate:  NewLeanTime(time.Now()),
+			TestDate:  &now,
 		})
 
 	if err := agent.Do(); nil != err {
@@ -110,9 +113,10 @@ func TestClassUpdate(t *testing.T) {
 		os.Getenv("LEAN_APPKEY"),
 		os.Getenv("LEAN_MASTERKEY"))
 
+	now := NewLeanTime(time.Now())
 	test := Test{
 		Array:    make([]string, 1),
-		TestDate: NewLeanTime(time.Now()),
+		TestDate: &now,
 	}
 	test.Array[0] = "hello"
 	agent := client.Collection("test").UpdateObjectById(id, test)

@@ -5,6 +5,8 @@ import (
 	"testing"
 )
 
+var fileId string
+
 func TestUploadPlainText(t *testing.T) {
 	client := NewClient(os.Getenv("LEAN_APPID"),
 		os.Getenv("LEAN_APPKEY"),
@@ -20,6 +22,8 @@ func TestUploadPlainText(t *testing.T) {
 		t.Error(err.Error())
 		return
 	}
+
+	fileId = ret.ObjectId
 
 	t.Logf("%v", ret)
 }

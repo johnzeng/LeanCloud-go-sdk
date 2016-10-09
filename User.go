@@ -7,14 +7,14 @@ import (
 //be attention that EmailVerified and MobilePhoneVerified can be nil
 type User struct {
 	LeanClassesBase
-	Salt                string                 `json:"salt,omitempty"`
-	Email               string                 `json:"email, omitempt"`
-	SessionToken        string                 `json:"sessionToken, omitempt"`
-	Passowrd            string                 `json:"password,omitempt"`
-	Username            string                 `json:"username,omitempt"`
-	EmailVerified       *bool                  `json:"emailVerified, omitempt"`
-	MobilePhoneNumber   string                 `json:"mobilePhoneNumber, omitempt"`
-	AuthData            map[string]interface{} `json:"authData, omitempt"`
+	Salt                string                 `json:"salt,omitemptyy"`
+	Email               string                 `json:"email, omitempty"`
+	SessionToken        string                 `json:"sessionToken, omitempty"`
+	Passowrd            string                 `json:"password,omitempty"`
+	Username            string                 `json:"username,omitempty"`
+	EmailVerified       *bool                  `json:"emailVerified, omitempty"`
+	MobilePhoneNumber   string                 `json:"mobilePhoneNumber, omitempty"`
+	AuthData            map[string]interface{} `json:"authData, omitempty"`
 	MobilePhoneVerified *bool                  `json:"mobilePhoneVerified, omitempty"`
 }
 
