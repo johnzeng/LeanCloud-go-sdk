@@ -14,7 +14,7 @@ type Test struct {
 	TestBytes    *LeanByte     `json:"bytess,omitempty"`
 	TestDate     *LeanTime     `json:"tester,omitempty"`
 	TestRelation *LeanRelation `json:"user,omitempty"`
-	TestFile     *LeanFile     `json:"file, omitempty"`
+	TestFile     *LeanFile     `json:"filePtr,omitempty"`
 	TestPointer  *LeanPointer  `json:"userPtr,omitempty"`
 	notUpload    string        `json:"notUpload,omitempty"`
 	Ignore       string        `json:"-"`
@@ -24,22 +24,23 @@ type Test struct {
 var id string
 
 //remember to uncomment this if you run this test first time otherwise you will get error on scan and query
-/*func TestCreateObjectFirstRun(t *testing.T) {
-	client := NewClient(os.Getenv("LEAN_APPID"),
-		os.Getenv("LEAN_APPKEY"),
-		os.Getenv("LEAN_MASTERKEY"))
-	agent := client.Collection("test").Create(
-		Test{
-			Hello:     "this is first message",
-			notUpload: "nono",
-			Ignore:    "ignore",
-			TestDate:  NewLeanTime(time.Now()),
-		})
-
-	if err := agent.Do(); nil != err {
-		t.Error(err.Error())
-	}
-}*/
+//func TestCreateObjectFirstRun(t *testing.T) {
+//	client := NewClient(os.Getenv("LEAN_APPID"),
+//		os.Getenv("LEAN_APPKEY"),
+//		os.Getenv("LEAN_MASTERKEY"))
+//	now := NewLeanTime(time.Now())
+//	agent := client.Collection("test").Create(
+//		Test{
+//			Hello:     "this is first message",
+//			notUpload: "nono",
+//			Ignore:    "ignore",
+//			TestDate:  &now,
+//		})
+//
+//	if err := agent.Do(); nil != err {
+//		t.Error(err.Error())
+//	}
+//}
 
 func TestCreateObject(t *testing.T) {
 	client := NewClient(os.Getenv("LEAN_APPID"),
@@ -67,6 +68,7 @@ func TestCreateObject(t *testing.T) {
 		t.Logf("%x", ret)
 		id = ret.ObjectId
 	}
+	t.Log("%v", agent.superAgent.Data)
 }
 
 func TestGetObjectById(t *testing.T) {
@@ -115,17 +117,27 @@ func TestClassUpdate(t *testing.T) {
 		os.Getenv("LEAN_APPKEY"),
 		os.Getenv("LEAN_MASTERKEY"))
 
+	TestUploadPlainText(t)
+	TestUserLogin(t)
+
 	now := NewLeanTime(time.Now())
+	pointer := LeanPointer{class: "_user", objectId: userId}
+	filePtr := LeanFile{Id: fileId}
 	test := Test{
-		Array:    make([]string, 1),
-		TestDate: &now,
+		Array:       make([]string, 1),
+		TestDate:    &now,
+		TestPointer: &pointer,
+		TestFile:    &filePtr,
 	}
 	test.Array[0] = "hello"
 	agent := client.Collection("test").UpdateObjectById(id, test)
 	if err := agent.Do(); nil != err {
+		t.Log("%v", agent.superAgent.Data)
 		t.Error(err.Error())
 		return
 	}
+
+	t.Log("%v", agent.superAgent.Data)
 
 }
 
@@ -133,9 +145,6 @@ func TestClassUpdateByPart(t *testing.T) {
 	client := NewClient(os.Getenv("LEAN_APPID"),
 		os.Getenv("LEAN_APPKEY"),
 		os.Getenv("LEAN_MASTERKEY"))
-
-	TestUserLogin(t)
-	TestUploadPlainText(t)
 
 	addObj := update.AddToArray("ss", "123", "456")
 	updateObj := update.AddRelation("user", LeanPointer{class: "_user", objectId: userId}).And(addObj)
